@@ -1,0 +1,75 @@
+const readline = require("readline");
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+let kelasA = [];
+let kelasB = [];
+
+function displayMenu() {
+  console.log("\nMenu:");
+  console.log("1. Gabungkan dua kelas");
+  console.log("2. Ambil nilai terbaik");
+  console.log("3. Hapus nilai terendah dan tambahkan nilai baru");
+  console.log("4. Tampilkan semua nilai");
+  console.log("5. Keluar");
+}
+
+function promptUser() {
+  displayMenu();
+  rl.question("\nPilih menu (1-5): ", (answer) => {
+    switch (answer) {
+      case "1":
+        rl.question("Masukkan nilai kelas A (pisahkan dengan koma): ", (inputA) => {
+          kelasA = inputA.split(",").map(Number);
+          rl.question("Masukkan nilai kelas B (pisahkan dengan koma): ", (inputB) => {
+            kelasB = inputB.split(",").map(Number);
+            console.log("Kelas berhasil digabungkan.");
+            promptUser();
+          });
+        });
+        break;
+
+      case "2":
+        let gabungan = kelasA.concat(kelasB);
+        gabungan.sort((a, b) => b - a); // Urutkan dari terbesar ke terkecil
+        const terbaik = gabungan.slice(0, 3); // Ambil 3 nilai terbaik
+        console.log("Nilai terbaik:", terbaik);
+        promptUser();
+        break;
+
+      case "3":
+        let semuaNilai = kelasA.concat(kelasB);
+        semuaNilai.sort((a, b) => a - b); // Urutkan dari terkecil ke terbesar
+        semuaNilai.splice(0, 1); // Hapus nilai terendah
+        rl.question("Masukkan nilai baru: ", (nilaiBaru) => {
+          semuaNilai.push(Number(nilaiBaru));
+          console.log("Nilai berhasil diperbarui:", semuaNilai);
+          promptUser();
+        });
+        break;
+
+      case "4":
+        console.log("Nilai kelas A:", kelasA);
+        console.log("Nilai kelas B:", kelasB);
+        console.log("Gabungan nilai:", kelasA.concat(kelasB));
+        promptUser();
+        break;
+
+      case "5":
+        console.log("Terima kasih telah menggunakan aplikasi ini.");
+        rl.close();
+        break;
+
+      default:
+        console.log("Pilihan tidak valid. Silakan coba lagi.");
+        promptUser();
+        break;
+    }
+  });
+}
+
+console.log("Selamat datang di Aplikasi Data Nilai Siswa!");
+promptUser();
