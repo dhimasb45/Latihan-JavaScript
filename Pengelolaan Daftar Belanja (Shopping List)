@@ -1,0 +1,83 @@
+const readline = require("readline");
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+let shoppingList = [];
+
+function displayMenu() {
+  console.log("\nMenu:");
+  console.log("1. Tambah barang ke akhir daftar");
+  console.log("2. Hapus barang terakhir dari daftar");
+  console.log("3. Tambah barang ke awal daftar");
+  console.log("4. Hapus barang pertama dari daftar");
+  console.log("5. Tampilkan daftar belanja");
+  console.log("6. Keluar");
+}
+
+function promptUser() {
+  displayMenu();
+  rl.question("\nPilih menu (1-6): ", (answer) => {
+    switch (answer) {
+      case "1":
+        rl.question("Masukkan barang untuk ditambahkan di akhir: ", (item) => {
+          shoppingList.push(item);
+          console.log(`Barang '${item}' ditambahkan ke akhir daftar.`);
+          promptUser();
+        });
+        break;
+
+      case "2":
+        if (shoppingList.length === 0) {
+          console.log("Daftar belanja kosong.");
+        } else {
+          const removedItem = shoppingList.pop();
+          console.log(`Barang '${removedItem}' dihapus dari akhir daftar.`);
+        }
+        promptUser();
+        break;
+
+      case "3":
+        rl.question("Masukkan barang untuk ditambahkan di awal: ", (item) => {
+          shoppingList.unshift(item);
+          console.log(`Barang '${item}' ditambahkan ke awal daftar.`);
+          promptUser();
+        });
+        break;
+
+      case "4":
+        if (shoppingList.length === 0) {
+          console.log("Daftar belanja kosong.");
+        } else {
+          const removedItem = shoppingList.shift();
+          console.log(`Barang '${removedItem}' dihapus dari awal daftar.`);
+        }
+        promptUser();
+        break;
+
+      case "5":
+        if (shoppingList.length === 0) {
+          console.log("Daftar belanja kosong.");
+        } else {
+          console.log(`Daftar Belanja: ${shoppingList.join(", ")}`);
+        }
+        promptUser();
+        break;
+
+      case "6":
+        console.log("Terima kasih telah menggunakan aplikasi ini.");
+        rl.close();
+        break;
+
+      default:
+        console.log("Pilihan tidak valid. Silakan coba lagi.");
+        promptUser();
+        break;
+    }
+  });
+}
+
+console.log("Selamat datang di Aplikasi Daftar Belanja!");
+promptUser();
